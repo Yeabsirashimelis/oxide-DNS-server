@@ -1,7 +1,7 @@
 use super::packet::DnsPacket;
 
 pub fn build_response(request: &DnsPacket) -> Vec<u8> {
-    let mut response = vec![0u8; 12];
+    let mut response = vec![0u8, 12];
 
     response[0..2].copy_from_slice(&request.header.id.to_be_bytes());
 
@@ -14,6 +14,8 @@ pub fn build_response(request: &DnsPacket) -> Vec<u8> {
     response[6..8].copy_from_slice(&0u16.to_be_bytes());
     response[8..10].copy_from_slice(&0u16.to_be_bytes());
     response[10..12].copy_from_slice(&0u16.to_be_bytes());
+    response.extend_from_slice(&request.raw_question);
+
 
     response
 }
